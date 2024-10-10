@@ -54,7 +54,7 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 
 **Rationale**: ALB with Ingress Controller provides intelligent routing capabilities, SSL termination, and seamless integration with EKS. It allows for efficient traffic distribution and enables advanced routing strategies.
 
-**Reference**: [Terragrunt GitHub Actions OIDC Integration with AWS ECR](https://www.youtube.com/watch?v=jLFR7tVChwA)
+**Reference**: [AWS WAF for Kubernetes EKS: ALB Ingress & ASG with ALB](https://www.youtube.com/watch?v=uMqS6Co_1G4)
 
 ### 4. Amazon RDS for MySQL
 **Purpose**: Provides a managed relational database for the application's structured data storage needs.
@@ -65,8 +65,6 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 - Automated backups and maintenance.
 
 **Rationale**: RDS offers a fully managed MySQL database, reducing administrative tasks while providing high availability, automated backups, and easy scalability. It's ideal for structured data that requires ACID compliance.
-
-ACID (Atomicity, Consistency, Isolation, Durability) is a set of properties that guarantee that database transactions are processed reliably. In the context of databases, a single logical operation on the data is called a transaction. For example, a transfer of funds from one bank account to another, even involving multiple changes such as debiting one account and crediting another, is a single transaction.
 
 **Reference**: [Terraform V-12: AWS RDS MySQL Tutorial for Beginners](https://www.youtube.com/watch?v=WqrdbobQIKc)
 
@@ -116,49 +114,66 @@ ACID (Atomicity, Consistency, Isolation, Durability) is a set of properties that
 ## Deployment Steps
 
 1. **Set up VPC and Networking**
-    - Use Terraform to create VPC with public and private subnets across multiple AZs.
-    - Set up Internet Gateway, NAT Gateways, and route tables.
+   - Use Terraform to create VPC with public and private subnets across multiple AZs.
+   - Set up Internet Gateway, NAT Gateways, and route tables.
 
 2. **Deploy EKS Cluster**
-    - Use Terraform to create EKS cluster in private subnets.
-    - Set up Karpenter for auto-scaling.
+   - Use Terraform to create EKS cluster in private subnets.
+   - Set up Karpenter for auto-scaling.
 
 3. **Configure Security Groups and NACLs**
-    - Create security groups for ALB, EKS nodes, RDS, ElastiCache, and other components.
-    - Set up NACLs for additional subnet-level security.
+   - Create security groups for ALB, EKS nodes, RDS, ElastiCache, and other components.
+   - Set up NACLs for additional subnet-level security.
 
 4. **Set up Database and Caching Layers**
-    - Deploy RDS MySQL instance in private subnets using Terraform.
-    - Create ElastiCache Redis Sentinel cluster in private subnets.
-    - Set up DynamoDB tables with required indexes.
+   - Deploy RDS MySQL instance in private subnets using Terraform.
+   - Create ElastiCache Redis Sentinel cluster in private subnets.
+   - Set up DynamoDB tables with required indexes.
 
 5. **Configure S3 and CloudFront**
-    - Create S3 buckets for file storage and static assets.
-    - Set up CloudFront distribution with S3 as origin using Terraform.
+   - Create S3 buckets for file storage and static assets.
+   - Set up CloudFront distribution with S3 as origin using Terraform.
 
 6. **Deploy Application Load Balancer and Ingress Controller**
-    - Set up ALB Ingress Controller in EKS.
-    - Configure listeners and target groups for microservices.
+   - Set up ALB Ingress Controller in EKS.
+   - Configure listeners and target groups for microservices.
 
 7. **Implement CI/CD Pipeline**
-    - Set up GitHub Actions for CI.
-    - Implement ArgoCD for continuous deployment to EKS.
-      **Reference**: [ArgoCD ApplicationSets kubernetes](https://www.youtube.com/watch?v=pkzth8gvVWA)
+   - Set up GitHub Actions for CI with OIDC integration for AWS ECR.
+   - Implement ArgoCD for continuous deployment to EKS.
+
+   **CI with GitHub Actions and OIDC Integration:**
+   - Configure GitHub Actions workflows to build and push Docker images to Amazon ECR.
+   - Use OpenID Connect (OIDC) for secure, token-based authentication between GitHub Actions and AWS.
+   - Implement Terragrunt for managing multi-environment infrastructure as code.
+
+   **Benefits:**
+   - Enhanced security by eliminating the need for long-lived AWS credentials.
+   - Streamlined CI process with automatic pushing of images to ECR.
+   - Simplified management of multi-environment deployments with Terragrunt.
+
+   **Reference**: [Terragrunt GitHub Actions OIDC Integration with AWS ECR](https://www.youtube.com/watch?v=jLFR7tVChwA)
+
+   **CD with ArgoCD:**
+   - Set up ArgoCD in the EKS cluster for GitOps-based deployments.
+   - Configure ApplicationSets for managing multiple similar applications.
+
+   **Reference**: [ArgoCD ApplicationSets kubernetes](https://www.youtube.com/watch?v=pkzth8gvVWA)
 
 8. **Configure Monitoring and Logging**
-    - Set up Prometheus and Grafana for monitoring and alerting.
-    - Implement ELK stack or Grafana Loki for centralized logging.
-    - Configure Slack integration for alerts.
-      **References**:
-        - [Kubernetes Monitoring with Lens | Application Alerting on Slack via Prometheus & Grafana](https://www.youtube.com/watch?v=bEIcYqiyfHU)
-        - [FinOps Effortless GKE Kubernetes Logs Costs Reduction with Grafana Loki](https://www.youtube.com/watch?v=A8_T-w6t-wQ)
-        - [Cut Logging Costs with ELK Stack & Fluent-Bit on EKS!](https://www.youtube.com/watch?v=Q6_qZ06dUts)
+   - Set up Prometheus and Grafana for monitoring and alerting.
+   - Implement ELK stack or Grafana Loki for centralized logging.
+   - Configure Slack integration for alerts.
+     **References**:
+      - [Kubernetes Monitoring with Lens | Application Alerting on Slack via Prometheus & Grafana](https://www.youtube.com/watch?v=bEIcYqiyfHU)
+      - [FinOps Effortless GKE Kubernetes Logs Costs Reduction with Grafana Loki](https://www.youtube.com/watch?v=A8_T-w6t-wQ)
+      - [Cut Logging Costs with ELK Stack & Fluent-Bit on EKS!](https://www.youtube.com/watch?v=Q6_qZ06dUts)
 
 9. **Implement Security Measures**
-    - Enable AWS WAF and configure rule sets.
-    - Implement AWS Shield for DDoS protection.
-    - Set up HashiCorp Vault for secrets management.
-      **Reference**: [HashiCorp Vault HA TLS Setup on Kubernetes with Secrets Injection in Application Pods](https://www.youtube.com/watch?v=8GPsE90ZlUg)
+   - Enable AWS WAF and configure rule sets.
+   - Implement AWS Shield for DDoS protection.
+   - Set up HashiCorp Vault for secrets management.
+     **Reference**: [HashiCorp Vault HA TLS Setup on Kubernetes with Secrets Injection in Application Pods](https://www.youtube.com/watch?v=8GPsE90ZlUg)
 
 ## Security Considerations
 
