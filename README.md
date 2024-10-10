@@ -204,7 +204,7 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 - Implement Grafana Loki or ELK stack for centralized logging:
   **Reference**: [Cut Logging Costs with ELK Stack & Fluent-Bit on EKS!](https://www.youtube.com/watch?v=Q6_qZ06dUts)
 - Use Lens for Kubernetes cluster management and monitoring with prometheus and grafana:
-  **Reference**: [Kubernetes Monitoring with Lens](https://www.youtube.com/watch?v=bEIcYqiyfHU)
+  **Reference**: [Kubernetes Monitoring with Prometheus & Grafana](https://www.youtube.com/watch?v=bEIcYqiyfHU)
 
 ## Disaster Recovery
 
