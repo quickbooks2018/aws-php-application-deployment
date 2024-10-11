@@ -75,7 +75,7 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 - Bitnami Redis Sentinel Helm chart for easy deployment.
 - Secure storage of sensitive data like session information and user preferences.
 
-**Rationale**: ElastiCache provides sub-millisecond latency for data retrieval, making it ideal for session storage and caching frequently accessed data. This reduces load on the primary database and improves application response times.
+**Rationale**: Redis Sentinel provides automatic failover, monitoring, and high availability for Redis instances. It ensures that the application can continue to function even in the event of a Redis node failure.
 
 **Reference**: [Kubernetes Redis High-Availability Cluster: Step-by-Step Guide to Setup Redis Sentinel](https://www.youtube.com/watch?v=eVa1Hbxice8)
 
