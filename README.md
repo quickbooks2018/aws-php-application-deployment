@@ -260,4 +260,4 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 
 ### Security and Networking
 - [AWS WAF for Kubernetes EKS: ALB Ingress & ASG with ALB](https://www.youtube.com/watch?v=uMqS6Co_1G4)
-- [EKS Istio Ambient Mesh L4 (Ztunnel) | End-to-End Encryption](https://www.youtube.com/watch?v=23a6SD-K
+- [EKS Istio Ambient Mesh L4 (Ztunnel) | End-to-End Encryption](https://www.youtube.com/watch?v=23a6SD-K_L8&t=453s)
