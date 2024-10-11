@@ -68,12 +68,12 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 
 **Reference**: [Terraform V-12: AWS RDS MySQL Tutorial for Beginners](https://www.youtube.com/watch?v=WqrdbobQIKc)
 
-### 5. Amazon ElastiCache for Redis
-**Purpose**: Offers in-memory caching to improve application performance and handle session storage.
+### 5. Kubernetes Redis Sentinel Cluster
+**Purpose**: Offers high availability and monitoring for Redis instances.
 
 **Configuration**:
-- Deployed as a Redis Sentinel cluster for high availability.
-- Placed in private subnets for security.
+- Bitnami Redis Sentinel Helm chart for easy deployment.
+- Secure storage of sensitive data like session information and user preferences.
 
 **Rationale**: ElastiCache provides sub-millisecond latency for data retrieval, making it ideal for session storage and caching frequently accessed data. This reduces load on the primary database and improves application response times.
 

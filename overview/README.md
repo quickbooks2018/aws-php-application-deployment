@@ -49,10 +49,12 @@ The infrastructure is divided into two main subnets: **Public Subnet** and **Pri
     - DynamoDB is used for NoSQL data storage needs, especially for unstructured or rapidly changing data.
     - It can be used to store application state, configurations, and session data.
 
-5. **Amazon ElastiCache (Redis)**
-    - ElastiCache using Redis is utilized as a caching layer to improve application performance.
+5. **Kubernetes Self Managed (Redis Sentinel)**
+    - Redis Sentinel is used for high availability and monitoring of Redis instances.
     - It helps in caching frequently accessed data, thus reducing the latency and load on databases like RDS and DynamoDB.
-
+    - Secure storage of sensitive data like session information and user preferences can be achieved using Redis.
+    - Secure keys and values can be stored in Redis, ensuring fast access and retrieval.
+   
 ## Traffic Flow Overview
 
 1. **Incoming Traffic**: All incoming requests first hit **AWS WAF** to filter out any malicious or unwanted traffic.
