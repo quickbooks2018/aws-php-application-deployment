@@ -53,7 +53,7 @@ The infrastructure is divided into two main subnets: **Public Subnet** and **Pri
     - Redis Sentinel is used for high availability and monitoring of Redis instances.
     - It helps in caching frequently accessed data, thus reducing the latency and load on databases like RDS and DynamoDB.
     - Secure storage of sensitive data like session information and user preferences can be achieved using Redis.
-    - Secure keys and values can be stored in Redis, ensuring fast access and retrieval.
+    - Secret keys can be securely stored in Redis, ensuring fast access and retrieval.
    
 ## Traffic Flow Overview
 
