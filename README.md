@@ -9,6 +9,7 @@
 6. [Monitoring and Logging](#monitoring-and-logging)
 7. [Disaster Recovery](#disaster-recovery)
 8. [Cost Optimization](#cost-optimization)
+9. [Code Quality and Static Analysis](#code-quality-and-static-analysis)
 
 ## Overview
 
@@ -114,66 +115,72 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 ## Deployment Steps
 
 1. **Set up VPC and Networking**
-   - Use Terraform to create VPC with public and private subnets across multiple AZs.
-   - Set up Internet Gateway, NAT Gateways, and route tables.
+    - Use Terraform to create VPC with public and private subnets across multiple AZs.
+    - Set up Internet Gateway, NAT Gateways, and route tables.
 
 2. **Deploy EKS Cluster**
-   - Use Terraform to create EKS cluster in private subnets.
-   - Set up Karpenter for auto-scaling.
+    - Use Terraform to create EKS cluster in private subnets.
+    - Set up Karpenter for auto-scaling.
 
 3. **Configure Security Groups and NACLs**
-   - Create security groups for ALB, EKS nodes, RDS, ElastiCache, and other components.
-   - Set up NACLs for additional subnet-level security.
+    - Create security groups for ALB, EKS nodes, RDS, ElastiCache, and other components.
+    - Set up NACLs for additional subnet-level security.
 
 4. **Set up Database and Caching Layers**
-   - Deploy RDS MySQL instance in private subnets using Terraform.
-   - Create ElastiCache Redis Sentinel cluster in private subnets.
-   - Set up DynamoDB tables with required indexes.
+    - Deploy RDS MySQL instance in private subnets using Terraform.
+    - Deploy Redis Sentinel cluster in EKS for caching and session management.
+    - Set up DynamoDB tables with required indexes.
 
 5. **Configure S3 and CloudFront**
-   - Create S3 buckets for file storage and static assets.
-   - Set up CloudFront distribution with S3 as origin using Terraform.
+    - Create S3 buckets for file storage and static assets.
+    - Set up CloudFront distribution with S3 as origin using Terraform.
 
 6. **Deploy Application Load Balancer and Ingress Controller**
-   - Set up ALB Ingress Controller in EKS.
-   - Configure listeners and target groups for microservices.
+    - Set up ALB Ingress Controller in EKS.
+    - Configure listeners and target groups for microservices.
 
 7. **Implement CI/CD Pipeline**
-   - Set up GitHub Actions for CI with OIDC integration for AWS ECR.
-   - Implement ArgoCD for continuous deployment to EKS.
+    - Set up GitHub Actions for CI with OIDC integration for AWS ECR.
+    - Implement ArgoCD for continuous deployment to EKS.
 
    **CI with GitHub Actions and OIDC Integration:**
-   - Configure GitHub Actions workflows to build and push Docker images to Amazon ECR.
-   - Use OpenID Connect (OIDC) for secure, token-based authentication between GitHub Actions and AWS.
-   - Implement Terragrunt for managing multi-environment infrastructure as code.
+    - Configure GitHub Actions workflows to build and push Docker images to Amazon ECR.
+    - Use OpenID Connect (OIDC) for secure, token-based authentication between GitHub Actions and AWS.
+    - Implement Terragrunt for managing multi-environment infrastructure as code.
 
    **Benefits:**
-   - Enhanced security by eliminating the need for long-lived AWS credentials.
-   - Streamlined CI process with automatic pushing of images to ECR.
-   - Simplified management of multi-environment deployments with Terragrunt.
+    - Enhanced security by eliminating the need for long-lived AWS credentials.
+    - Streamlined CI process with automatic pushing of images to ECR.
+    - Simplified management of multi-environment deployments with Terragrunt.
 
    **Reference**: [Terragrunt GitHub Actions OIDC Integration with AWS ECR](https://www.youtube.com/watch?v=jLFR7tVChwA)
 
    **CD with ArgoCD:**
-   - Set up ArgoCD in the EKS cluster for GitOps-based deployments.
-   - Configure ApplicationSets for managing multiple similar applications.
+    - Set up ArgoCD in the EKS cluster for GitOps-based deployments.
+    - Configure ApplicationSets for managing multiple similar applications.
 
    **Reference**: [ArgoCD ApplicationSets kubernetes](https://www.youtube.com/watch?v=pkzth8gvVWA)
 
 8. **Configure Monitoring and Logging**
-   - Set up Prometheus and Grafana for monitoring and alerting.
-   - Implement ELK stack or Grafana Loki for centralized logging.
-   - Configure Slack integration for alerts.
-     **References**:
-      - [Kubernetes Monitoring with Lens | Application Alerting on Slack via Prometheus & Grafana](https://www.youtube.com/watch?v=bEIcYqiyfHU)
-      - [FinOps Effortless GKE Kubernetes Logs Costs Reduction with Grafana Loki](https://www.youtube.com/watch?v=A8_T-w6t-wQ)
-      - [Cut Logging Costs with ELK Stack & Fluent-Bit on EKS!](https://www.youtube.com/watch?v=Q6_qZ06dUts)
+    - Set up Prometheus and Grafana for monitoring and alerting.
+    - Implement ELK stack or Grafana Loki for centralized logging.
+    - Configure Slack integration for alerts.
+      **References**:
+        - [Kubernetes Monitoring with Lens | Application Alerting on Slack via Prometheus & Grafana](https://www.youtube.com/watch?v=bEIcYqiyfHU)
+        - [FinOps Effortless GKE Kubernetes Logs Costs Reduction with Grafana Loki](https://www.youtube.com/watch?v=A8_T-w6t-wQ)
+        - [Cut Logging Costs with ELK Stack & Fluent-Bit on EKS!](https://www.youtube.com/watch?v=Q6_qZ06dUts)
 
 9. **Implement Security Measures**
-   - Enable AWS WAF and configure rule sets.
-   - Implement AWS Shield for DDoS protection.
-   - Set up HashiCorp Vault for secrets management.
-     **Reference**: [HashiCorp Vault HA TLS Setup on Kubernetes with Secrets Injection in Application Pods](https://www.youtube.com/watch?v=8GPsE90ZlUg)
+    - Enable AWS WAF and configure rule sets.
+    - Implement AWS Shield for DDoS protection.
+    - Set up HashiCorp Vault for secrets management.
+      **Reference**: [HashiCorp Vault HA TLS Setup on Kubernetes with Secrets Injection in Application Pods](https://www.youtube.com/watch?v=8GPsE90ZlUg)
+
+10. **Set up Code Quality and Static Analysis**
+    - Integrate Sonarqube with GitHub Actions for continuous code quality checks.
+    - Configure Sonarqube server in the EKS cluster or use SonarCloud for cloud-based analysis.
+    - Set up quality gates and code coverage thresholds.
+      **Reference**: [Spring Boot SonarQube Integration with GitHub Actions](https://www.youtube.com/watch?v=eqBhvYel-t8)
 
 ## Security Considerations
 
@@ -213,7 +220,6 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 - Set up S3 cross-region replication for important data.
 - Implement regular backups for all stateful components.
 - Create and regularly test a disaster recovery plan.
-- Use Velero for Kubernetes cluster and persistent volume backups.
 
 ## Cost Optimization
 
@@ -224,3 +230,20 @@ This document outlines a comprehensive microservices-based AWS architecture for 
 - Utilize AWS Cost Explorer and Budgets for ongoing cost management and forecasting.
 - Implement FinOps practices for Kubernetes cost management:
   **Reference**: [FinOps Effortless GKE Kubernetes Logs Costs Reduction](https://www.youtube.com/watch?v=A8_T-w6t-wQ)
+
+## Code Quality and Static Analysis
+
+- Integrate Sonarqube with GitHub Actions for automated code quality checks on every pull request and merge to main branch.
+- Use Sonarqube to identify code smells, bugs, vulnerabilities, and security hotspots.
+- Set up quality gates to prevent merging of code that doesn't meet predefined quality criteria.
+- Monitor code coverage and set minimum thresholds to ensure adequate test coverage.
+- Regularly review Sonarqube reports and address identified issues to maintain high code quality.
+- Consider using SonarCloud for cloud-based analysis if you prefer not to manage a Sonarqube server.
+
+**Benefits:**
+- Early detection of code quality issues and security vulnerabilities.
+- Consistent code quality across the entire project.
+- Automated enforcement of coding standards and best practices.
+- Improved overall maintainability and reliability of the codebase.
+
+**Reference**: [Spring Boot SonarQube Integration with GitHub Actions](https://www.youtube.com/watch?v=eqBhvYel-t8)
